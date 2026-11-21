@@ -4,6 +4,7 @@ version = "0.1.0"
 min_ask_kit = "0.3.0"
 says = "the processes on this machine: what is using a port (address already in use), what is using the CPU or the memory, whether a program is running and since when, what a session or a terminal left running (dev servers, watchers, builds), what started a process; and stopping one when asked (by pid or by the port it holds)"
 keywords = ["(on|holds?|holding|using|uses|listens? on|bound to) port \\d+", "port \\d+ (is |are )?(in use|taken|busy|free)", "ports? (is |are )?(in use|taken|busy)", "EADDRINUSE", "address already in use", "listening on", "process(es)?", "pids?", "dev servers? (is |are )?(still )?running", "left running", "still running", "is \\S+ running", "cpu", "memory", "ram", "(machine|computer|laptop|mac) (is )?(so )?slow", "zombies?", "kill", "hung", "stuck process"]
+patterns = ['\b(holding|using|listening on|bound to) port \d+\b', '\bis (the |my )?dev server (still )?(running|up|alive)\b']
 route_hint = "which process holds a port, uses the CPU or memory, or was left running on this machine, and stopping it, is procs; a systemd unit's state, its journal and its restarts are systemd; a container is docker; whether a remote host or URL answers is net; what a past session ran is sessions"
 cite = "the pid, the process name and its command, and for a port the address and what listed it"
 instructions = "instructions.md"
