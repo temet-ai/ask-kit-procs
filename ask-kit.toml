@@ -1,0 +1,30 @@
+id = "temet.procs"
+name = "procs"
+version = "0.1.0"
+min_ask_kit = "0.3.0"
+says = "the processes on this machine: what is using a port (address already in use), what is using the CPU or the memory, whether a program is running and since when, what a session or a terminal left running (dev servers, watchers, builds), what started a process; and stopping one when asked (by pid or by the port it holds)"
+keywords = ["(on|holds?|holding|using|uses|listens? on|bound to) port \\d+", "port \\d+ (is |are )?(in use|taken|busy|free)", "ports? (is |are )?(in use|taken|busy)", "EADDRINUSE", "address already in use", "listening on", "process(es)?", "pids?", "dev servers? (is |are )?(still )?running", "left running", "still running", "is \\S+ running", "cpu", "memory", "ram", "(machine|computer|laptop|mac) (is )?(so )?slow", "zombies?", "kill", "hung", "stuck process"]
+route_hint = "which process holds a port, uses the CPU or memory, or was left running on this machine, and stopping it, is procs; a systemd unit's state, its journal and its restarts are systemd; a container is docker; whether a remote host or URL answers is net; what a past session ran is sessions"
+cite = "the pid, the process name and its command, and for a port the address and what listed it"
+instructions = "instructions.md"
+acts = ["procs.kill"]
+
+[[sources]]
+kind = "module"
+name = "procs"
+module = "procs.mjs"
+api = "api.d.ts"
+
+[[actions]]
+name = "port"
+title = "Which process holds a port"
+script = "port"
+match = ['(?:what|which process|who)(?: is|\x27s) (?:using|listening on|holding|on|running on) port (?<port>\d{2,5})', 'what (?:is )?(?:running|listening) on port (?<port>\d{2,5})', 'is (?:anything|something) (?:using|listening on|running on) port (?<port>\d{2,5})']
+expect = '"verdict"'
+
+[[actions]]
+name = "top"
+title = "What is using the CPU and memory now"
+script = "top"
+match = ['what(?: is|\x27s) (?:using|eating|hogging|taking)(?: up)?(?: all)?(?: (?:the|my|of the|of my))? (?:cpu|memory|ram|cpu and memory)', 'why is (?:my|the|this) (?:machine|computer|laptop|mac) (?:so )?slow']
+expect = '"verdict"'

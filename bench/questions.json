@@ -1,0 +1,12 @@
+{
+  "questions": [
+    { "id": "port-free", "do": "port", "params": { "port": 1 }, "expect": ["nothing is listening on port 1", "\"listeners\": \\[\\]"] },
+    { "id": "ports-all", "do": "port", "expect": ["ports have a listener|no way to list listeners", "\"by\""] },
+    { "id": "tree-self", "do": "tree", "params": { "pid": "self" }, "expect": ["was started by", "\"parents\": \\[", "\"name\": \"node"] },
+    { "id": "tree-gone", "do": "tree", "params": { "pid": 4194000 }, "expect": ["no process 4194000"] },
+    { "id": "top", "do": "top", "params": { "seconds": 0.3 }, "expect": ["\"cores\": \\d+", "memory \\d+% used", "\"mem\": \\[", "\"usedPercent\""] },
+    { "id": "find-none", "do": "find", "params": { "match": "detritus-the-troll-daemon" }, "expect": ["no running process matches"] },
+    { "id": "running", "do": "running", "expect": ["\"verdict\"", "running|nothing started by hand"] },
+    { "id": "stop-nothing", "do": "stop", "params": { "port": 1 }, "expect": ["nothing is listening on port 1; nothing was stopped", "\"portFree\": true"] }
+  ]
+}
