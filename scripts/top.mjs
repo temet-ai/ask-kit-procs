@@ -7,8 +7,7 @@ export const meta = {
 };
 
 export default async function ({ procs }, { n = 8, seconds = 1 } = {}) {
-  const busy = await procs.busy({ seconds: Number(seconds), limit: Number(n) });
-  const mem = await procs.list({ sort: "memory", limit: Number(n) });
+  const [busy, mem] = await Promise.all([procs.busy({ seconds: Number(seconds), limit: Number(n) }), procs.list({ sort: "memory", limit: Number(n) })]);
   const memory = procs.memory();
   const top = busy.processes[0];
   const big = mem.processes[0];

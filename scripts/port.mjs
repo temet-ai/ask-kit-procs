@@ -8,16 +8,15 @@ export const meta = {
 
 export default async function ({ procs }, { port } = {}) {
   const r = await procs.ports(port != null && port !== "" ? { port: Number(port) } : {});
-  const listeners = [];
-  for (const l of r.listeners) {
+  const listeners = await Promise.all(r.listeners.map(async (l) => {
     let startedBy;
     if (l.pid != null && port != null) {
       const t = await procs.tree(l.pid);
       const p = t.parents[0];
       startedBy = !p || p.pid === 1 ? "its parent has gone (it runs on its own now)" : `${p.name} (pid ${p.pid})${t.parents[1] && t.parents[1].pid !== 1 ? `, under ${t.parents[1].name}` : ""}`;
     }
-    listeners.push({ ...l, ...(startedBy ? { startedBy } : {}) });
-  }
+    return { ...l, ...(startedBy ? { startedBy } : {}) };
+  }));
   const verdict = !r.by
     ? r.note
     : port != null && port !== ""

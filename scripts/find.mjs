@@ -7,8 +7,8 @@ export const meta = {
 
 export default async function ({ procs }, { match, sort = "memory", limit = 20 } = {}) {
   if (!match) throw new Error("find needs `match`: words from the process's name, command or folder");
-  const guard = new Set(await procs.protected());
-  const r = await procs.list({ match, sort, limit: 5000 });
+  const [prot, r] = await Promise.all([procs.protected(), procs.list({ match, sort, limit: 5000 })]);
+  const guard = new Set(prot);
   // The processes answering this very question hold the words in their own arguments: they are not what was asked about.
   const kept = r.processes.filter((p) => !guard.has(p.pid)).map(({ rssBytes, ...p }) => p);
   const n = Number(limit);

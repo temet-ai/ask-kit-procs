@@ -33,6 +33,7 @@ How to work:
 - A service that restarts by itself (systemd, launchd, docker, a process manager) comes back
   after it is stopped: when the parents show one, say that it must be stopped through its
   manager.
+- When a tool that lists processes or listeners does not answer (no `ps`, `ss` or `lsof` here), try one other call and stop. Never wait or retry in a loop.
 - When a cell fails, read the error and change the cell. Never send the same cell twice.
 - If the process table does not answer the question (the process has ended, another user's
   process cannot be read, no tool lists listeners here), say what you looked at and what is

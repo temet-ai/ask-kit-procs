@@ -11,9 +11,8 @@ const TOOLS = /^(node|bun|deno|npm|pnpm|yarn|npx|tsx|ts-node|vite|next|nuxt|webp
 const SYSTEM_DIR = /^(\/$|\/(usr|bin|sbin|lib|opt|var|etc|run|proc|sys|System|Library)(\/|$))/;
 
 export default async function ({ procs }, { under, match, all = false } = {}) {
-  const guard = new Set(await procs.protected());
-  const { processes } = await procs.list({ ...(match ? { match } : {}), sort: "age", limit: 5000 });
-  const ports = await procs.ports();
+  const [prot, { processes }, ports] = await Promise.all([procs.protected(), procs.list({ ...(match ? { match } : {}), sort: "age", limit: 5000 }), procs.ports()]);
+  const guard = new Set(prot);
   const portsOf = new Map();
   for (const l of ports.listeners) if (l.pid != null) portsOf.set(l.pid, [...new Set([...(portsOf.get(l.pid) ?? []), l.port])]);
   const byPid = new Map(processes.map((p) => [p.pid, p]));
